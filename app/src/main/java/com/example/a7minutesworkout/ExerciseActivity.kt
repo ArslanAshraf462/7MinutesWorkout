@@ -1,5 +1,6 @@
 package com.example.a7minutesworkout
 
+import android.content.Intent
 import android.media.MediaPlayer
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
@@ -18,9 +19,11 @@ import kotlin.collections.ArrayList
 class ExerciseActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
     private var binding :  ActivityExerciseBinding? = null
     private var restTimer : CountDownTimer? = null
+    private var restTimerDuration : Long = 1
     private var restProgress = 0
 
     private var exerciseTimer : CountDownTimer? = null
+    private var exerciseTimerDuration : Long = 1
     private var exerciseProgress = 0
 
     private var exerciseList : ArrayList<ExerciseModel>? = null
@@ -108,7 +111,7 @@ class ExerciseActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
 
     private fun setRestProgressBar(){
        binding?.progressBar?.progress = restProgress
-       restTimer = object: CountDownTimer(10000, 1000){
+       restTimer = object: CountDownTimer(restTimerDuration*1000, 1000){
            override fun onTick(millisUntilFinished: Long) {
                restProgress++
                binding?.progressBar?.progress = 10 - restProgress
@@ -132,7 +135,7 @@ class ExerciseActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
 
     private fun setExerciseProgressBar(){
         binding?.progressBarExercise?.progress = exerciseProgress
-        exerciseTimer = object: CountDownTimer(30000, 1000){
+        exerciseTimer = object: CountDownTimer(exerciseTimerDuration*1000, 1000){
             override fun onTick(millisUntilFinished: Long) {
                 exerciseProgress++
                 binding?.progressBarExercise?.progress = 30 - exerciseProgress
@@ -140,17 +143,21 @@ class ExerciseActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
             }
 
             override fun onFinish() {
-                exerciseList!![currentExercisePosition].setIsSelected(false)
-                exerciseList!![currentExercisePosition].setIsCompleted(true)
-                exerciseAdapter!!.notifyDataSetChanged()
+
                 if(currentExercisePosition < exerciseList?.size!! - 1){
+                    exerciseList!![currentExercisePosition].setIsSelected(false)
+                    exerciseList!![currentExercisePosition].setIsCompleted(true)
+                    exerciseAdapter!!.notifyDataSetChanged()
                     setupRestView()
                 }else{
-                    Toast.makeText(
-                    this@ExerciseActivity,
-                    "Congratulations!, You have completed the 7 minutes workout.",
-                    Toast.LENGTH_SHORT
-                ).show()
+                    finish()
+                    val intent =  Intent(this@ExerciseActivity, FinishActivity::class.java)
+                    startActivity(intent)
+//                    Toast.makeText(
+//                    this@ExerciseActivity,
+//                    "Congratulations!, You have completed the 7 minutes workout.",
+//                    Toast.LENGTH_SHORT
+//                ).show()
                 }
             }
 
