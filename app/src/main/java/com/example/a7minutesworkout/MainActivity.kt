@@ -24,6 +24,11 @@ class MainActivity : AppCompatActivity() {
 //                Toast.LENGTH_SHORT
 //            ).show()
         }
+
+        binding?.flBMI?.setOnClickListener {
+            val intent = Intent(this,BMIActivity::class.java)
+            startActivity(intent)
+        }
 //        flStartButton.setOnClickListener {
 //            Toast.makeText(
 //                this@MainActivity,
