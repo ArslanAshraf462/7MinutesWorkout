@@ -117,6 +117,8 @@ class ExerciseActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
 
            override fun onFinish() {
                currentExercisePosition++
+               exerciseList!![currentExercisePosition].setIsSelected(true)
+               exerciseAdapter!!.notifyDataSetChanged()
                setupExerciseView()
 //               Toast.makeText(
 //                   this@ExerciseActivity,
@@ -138,6 +140,9 @@ class ExerciseActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
             }
 
             override fun onFinish() {
+                exerciseList!![currentExercisePosition].setIsSelected(false)
+                exerciseList!![currentExercisePosition].setIsCompleted(true)
+                exerciseAdapter!!.notifyDataSetChanged()
                 if(currentExercisePosition < exerciseList?.size!! - 1){
                     setupRestView()
                 }else{
